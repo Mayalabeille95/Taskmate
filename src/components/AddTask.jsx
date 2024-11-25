@@ -1,10 +1,29 @@
 // Déclaration du composant fonctionnel AddTask qui prend en paramètres : handleSubmit, editid, task, setTask
 const AddTask = ({ handleSubmit, editid, task, setTask }) => {
+  // Fonction Validate qui vérifie si le texte contient le mot "Milan" (insensible à la casse)
+  const Validate = (task) => {
+    const NonValid = /Milan/i; // Expression régulière pour chercher "Milan", insensible à la casse grâce au drapeau 'i'
+    return !NonValid.test(task); // Retourne true si "Milan" n'est PAS trouvé, false sinon
+  };
+
+  // Nouvelle version de handleSubmit qui inclut la validation
+  const handleFormSubmit = (e) => {
+    e.preventDefault(); // Empêche la soumission par défaut du formulaire, évitant ainsi un rechargement de la page
+
+    // Vérifie si la tâche est valide avant de soumettre
+    if (Validate(task)) {
+      handleSubmit(); // Appelle la fonction handleSubmit d'origine si la tâche est valide
+    } else {
+      // Affiche un message d'alerte si la tâche contient un mot non autorisé (comme "Milan")
+      alert("Le champ de texte contient un mot non autorisé.");
+    }
+  };
+
   return (
     // Balise section qui sert de conteneur principal pour le composant
     <section className="addTask">
-      {/* Formulaire qui appelle la fonction handleSubmit lors de la soumission */}
-      <form onSubmit={handleSubmit}>
+      {/* Formulaire qui appelle la fonction handleFormSubmit lors de la soumission */}
+      <form onSubmit={handleFormSubmit}>
         {/* Champ de texte pour saisir la tâche, avec un événement onChange pour mettre à jour la valeur de task */}
         <input
           type="text" // Définition du type de champ de formulaire (texte)
